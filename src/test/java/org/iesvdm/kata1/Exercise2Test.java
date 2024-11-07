@@ -69,11 +69,16 @@ public class Exercise2Test extends PetDomainForKata {
     public void findPetNamedSerpy() {
         //TODO
         // transform this into a list of pets from people
-        List<Pet> petList = new ArrayList<>();
+        List<Pet> petList = this.people.stream()
+                .flatMap(person -> person.getPets().stream())
+                .toList();
 
         //TODO
         // obtain serpySnake pet from petList
-        Pet serpySnake = new Pet(PetType.BIRD,"", 0);
+        Pet serpySnake = petList.stream()
+                .filter(p->p.getName().equalsIgnoreCase("Serpy")&&p.getType().equals(PetType.SNAKE))
+                .findFirst()
+                .orElse(new Pet(PetType.DOG,"", 0));
 
         Assertions.assertEquals("🐍",serpySnake.getType().toString());
     }
