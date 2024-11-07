@@ -31,8 +31,10 @@ public abstract class PetDomainForKata
         );
     }
 
-    public Optional<Person> getPersonNamed(String fullName)
-    {
-        return Optional.empty(); //TODO
+    public Optional<Person> getPersonNamed(String fullName) {
+        return this.people.stream()
+                .filter(person -> person.getFullName()
+                .equalsIgnoreCase(fullName))
+                .findFirst();
     }
 }
