@@ -88,7 +88,8 @@ public class Exercise2Test extends PetDomainForKata {
     public void getPeopleWithPets() {
         //TODO
         // replace with only the pet owners
-        List<Person> petPeople = new ArrayList<>();
+        List<Person> petPeople = this.people.stream()
+                .filter(person -> person.isPetPerson()).toList();
 
         Assertions.assertEquals(7, petPeople.size());
     }
@@ -116,7 +117,10 @@ public class Exercise2Test extends PetDomainForKata {
 
         //TODO
         // use the previous function to obtain the set of emojis
-        Set<String> petEmojis = new HashSet<>();
+        Set<String> petEmojis = this.people.stream()
+                .map(function)
+                .flatMap(map -> map.keySet().stream())
+                .collect(Collectors.toSet());
 
         var expected = Set.of("🐱", "🐶", "🐢", "🐹", "🐦", "🐍");
         Assertions.assertEquals(expected, petEmojis);
@@ -127,7 +131,9 @@ public class Exercise2Test extends PetDomainForKata {
     public void getFirstNamesOfAllPeople() {
         //TODO
         // transform this.people into a list of first names
-        List<String> firstNames = new ArrayList<>();
+        List<String> firstNames = this.people.stream()
+                .map(person -> person.getFirstName())
+                .toList();
 
         var expectedList = List.of("Mary", "Bob", "Ted", "Jake", "Barry", "Terry", "Harry", "John");
         Assertions.assertEquals(expectedList, firstNames);
@@ -139,9 +145,12 @@ public class Exercise2Test extends PetDomainForKata {
     public void doAnyPeopleHaveCatsRefactor() {
         //TODO
         // test with a stream on people, if anyone has a cat at least
-        boolean peopleHaveCatsLambda = false;
-        Assertions.assertTrue(peopleHaveCatsLambda);
+        boolean peopleHaveCatsLambda = this.people.stream()
+                .anyMatch(person -> person.hasPet(PetType.CAT));
+                //Si fuese negativo seria con noneMatch
+                // .noneMatch(person -> person.hasPet(PetType.CAT));
 
+        Assertions.assertTrue(peopleHaveCatsLambda);
     }
 
     @Test
@@ -150,7 +159,9 @@ public class Exercise2Test extends PetDomainForKata {
     public void doAllPeopleHaveCatsRefactor() {
         //TODO
         // test if all the people have cats
-        boolean peopleHaveCats = true;
+        boolean peopleHaveCats = this.people.stream()
+                .allMatch(person -> person.hasPet(PetType.CAT));
+
         Assertions.assertFalse(peopleHaveCats);
     }
 
@@ -160,7 +171,10 @@ public class Exercise2Test extends PetDomainForKata {
     public void getPeopleWithCatsRefactor() {
         //TODO
         // obtain persons with cats
-        List<Person> peopleWithCats = new ArrayList<>();
+        List<Person> peopleWithCats = this.people.stream()
+                .filter(person -> person.hasPet(PetType.CAT))
+                .toList();
+
         Assertions.assertEquals(2, peopleWithCats.size());
     }
 
@@ -170,7 +184,10 @@ public class Exercise2Test extends PetDomainForKata {
     public void getPeopleWithoutCatsRefactor() {
         //TODO
         // obtain persons without cats
-        List<Person> peopleWithoutCats = new ArrayList<>();
+        List<Person> peopleWithoutCats = this.people.stream()
+                .filter(person -> !person.hasPet(PetType.CAT))
+                .toList();
+
         Assertions.assertEquals(6, peopleWithoutCats.size());
     }
 }
